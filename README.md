@@ -2,6 +2,10 @@
 
 > A table (with tree-grid) component for Vue.js 2.0. (Its style extends [@iView](https://github.com/iview/iview))
 
+## 修改说明
+CheckBox 的处理实在太难看。调整之后去掉了 checkbox 列，将 checkbox 和第一列节点显示在一起，且缩进显示。
+![Example](./example/tree-with-select.png)
+
 ## Example
 
 ![Example](./example/example.gif)

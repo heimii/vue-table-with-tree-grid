@@ -176,40 +176,35 @@ export default {
       if (this.isExpandCell(this.table, columnIndex)) {
         return <i class='zk-icon zk-icon-angle-right'></i>;
       }
-      // SelectionType's Checkbox
-      if (this.isSelectionCell(this.table, columnIndex)) {
-        let allCheck;
-        let childrenIndex;
-        const hasChildren = row._childrenLen > 0;
-        if (hasChildren) {
-          childrenIndex = this.getChildrenIndex(row._level, rowIndex, false);
-          allCheck = true;
-          for (let i = 0; i < childrenIndex.length; i++) {
-            if (!this.table.bodyData[childrenIndex[i]]._isChecked) {
-              allCheck = false;
-              break;
-            }
-          }
-        } else {
-          allCheck = row._isChecked;
-        }
-        let indeterminate = false;
-        if (hasChildren && !allCheck) {
-          for (let i = 0; i < childrenIndex.length; i++) {
-            if (this.table.bodyData[childrenIndex[i]]._isChecked) {
-              indeterminate = true;
-              break;
-            }
-          }
-        }
-        return <Checkbox
-          indeterminate={ indeterminate }
-          value={ allCheck }
-          onOn-change={ isChecked => this.handleEvent(null, 'checkbox', { row, rowIndex, column, columnIndex }, { isChecked }) }>
-          </Checkbox>;
-      }
-      // Tree's firstProp
       if (this.table.treeType && this.table.firstProp === column.prop) {
+        // SelectionType's Checkbox, merged to the first prop
+        if (this.table.selectionType) {
+          let allCheck;
+          let childrenIndex;
+          const hasChildren = row._childrenLen > 0;
+          if (hasChildren) {
+            childrenIndex = this.getChildrenIndex(row._level, rowIndex, false);
+            allCheck = true;
+            for (let i = 0; i < childrenIndex.length; i++) {
+              if (!this.table.bodyData[childrenIndex[i]]._isChecked) {
+                allCheck = false;
+                break;
+              }
+            }
+          } else {
+            allCheck = row._isChecked;
+          }
+          let indeterminate = false;
+          if (hasChildren && !allCheck) {
+            for (let i = 0; i < childrenIndex.length; i++) {
+              if (this.table.bodyData[childrenIndex[i]]._isChecked) {
+                indeterminate = true;
+                break;
+              }
+            }
+          }
+        }
+      // Tree's firstProp
         return <span
           class={ `${this.prefixCls}--level-${row._level}-cell` }
           style={{
@@ -220,6 +215,16 @@ export default {
               <i
                 class={ `${this.prefixCls}--tree-icon zk-icon zk-icon-${row._isFold ? 'plus' : 'minus'}-square-o`}
                 on-click={ $event => this.handleEvent($event, 'icon', { row, rowIndex, column, columnIndex }, { isFold: row._isFold }) }></i>
+            }
+            {
+              this.table.selectionType &&
+              <Checkbox
+                indeterminate={ indeterminate }
+                value={ allCheck }
+                onOn-change={ isChecked => this.handleEvent(null, 'checkbox', { row, rowIndex, column, columnIndex },
+                { isChecked }) }
+                style='margin-right: 5px; margin-bottom: 5px;'>
+              </Checkbox>
             }
             { row[column.prop] ? row[column.prop] : '' }
         </span>;

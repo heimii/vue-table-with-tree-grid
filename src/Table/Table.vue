@@ -87,9 +87,6 @@
       });
     }
     if (table.selectionType) {
-      columns.unshift({
-        width: '50',
-      });
     }
     if (table.showIndex) {
       columns.unshift({
